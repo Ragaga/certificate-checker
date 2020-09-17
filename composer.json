@@ -1,0 +1,28 @@
+{
+  "name": "ragaga/certificate-checker",
+  "description": "Cryptopro, Rutoken Certificate checker library",
+  "type": "library",
+  "authors": [
+    {
+      "name": "Gennadiy Chernykh",
+      "email": "gc@thisisit.ru"
+    }
+  ],
+  "require": {
+    "php": "^7.2",
+    "ext-openssl": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Ragaga\\CertificateChecker\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Ragaga\\Tests\\": "tests"
+    }
+  }
+}
