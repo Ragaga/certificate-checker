@@ -4,6 +4,9 @@
 use PHPUnit\Framework\TestCase;
 use Ragaga\CertificateChecker\CheckerFactory;
 use Ragaga\CertificateChecker\Checkers\Checker;
+use Ragaga\CertificateChecker\Checkers\CryptoproChecker;
+use Ragaga\CertificateChecker\Checkers\RutokenChecker;
+use Ragaga\CertificateChecker\Enums\CryptoProvider;
 
 class CertificateFactoryTest extends TestCase
 {
@@ -24,5 +27,23 @@ class CertificateFactoryTest extends TestCase
         });
         $checker = $factory->getChecker('test');
         self::assertEquals($mock, $checker);
+    }
+
+
+    public function testDefaultCheckers()
+    {
+        $factory = new CheckerFactory();
+        self::assertInstanceOf(RutokenChecker::class, $factory->getChecker(CryptoProvider::RUTOKEN));
+        self::assertInstanceOf(CryptoproChecker::class, $factory->getChecker(CryptoProvider::CRYPTOPRO));
+    }
+
+    public function testClassBindings()
+    {
+        $factory = new CheckerFactory([
+            CryptoProvider::CRYPTOPRO => CryptoproChecker::class,
+        ]);
+        self::assertInstanceOf(CryptoproChecker::class, $factory->getChecker(CryptoProvider::CRYPTOPRO));
+        $this->expectException(DomainException::class);
+        $factory->getChecker(CryptoProvider::RUTOKEN);
     }
 }

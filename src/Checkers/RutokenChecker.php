@@ -2,6 +2,8 @@
 
 namespace Ragaga\CertificateChecker\Checkers;
 
+use Ragaga\CertificateChecker\Certificate;
+
 class RutokenChecker implements Checker
 {
     /** @var string */
@@ -36,14 +38,14 @@ class RutokenChecker implements Checker
         return $result === 0;
     }
 
-    public function getCertificate(string $source, string $signature)
+    public function getCertificate(string $source, string $signature): Certificate
     {
         $beginString = '-----BEGIN PKCS7-----' . "\n";
         $endString = '-----END PKCS7-----' . "\n";
         $signature = $beginString . $signature . $endString;
         openssl_pkcs7_read($signature, $certs);
 
-        return openssl_x509_parse($certs[0]);
+        return new Certificate(openssl_x509_parse($certs[0] ?? []));
     }
 
     protected function saveToFile(string $fileName, string $source)

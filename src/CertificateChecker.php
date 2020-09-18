@@ -33,20 +33,15 @@ class CertificateChecker
         if (!$certificate) {
             throw new \DomainException('Сертификат не найден');
         }
-        $certificateInn = ltrim($certificate['subject']['INN'] ?? '', '0');
 
-        return $certificateInn === $inn;
+        return $certificate->getInn() === $inn;
     }
 
     public function isHeadNameValid(SignatureData $signatureData, string $headName): bool
     {
         $certificate = $this->getCertificate($signatureData);
-        $certificateName = implode(' ', [
-            $certificate['subject']['SN'] ?? '',
-            $certificate['subject']['GN'] ?? ''
-        ]);
 
-        return mb_strtolower($certificateName) === mb_strtolower($headName);
+        return mb_strtolower($certificate->getHeadName()) === mb_strtolower($headName);
     }
 
     public function isSerialNumberValid(SignatureData $signatureData): bool
@@ -55,15 +50,10 @@ class CertificateChecker
             throw new \DomainException('Serial Number Repository is not set');
         }
         $certificate = $this->getCertificate($signatureData);
-        $ident = $certificate['extensions']['authorityKeyIdentifier'] ?? '';
-        preg_match('/keyid:([\S]+)/', $ident, $matches);
-        $serial = $matches[1] ?? '';
-        $serial = str_replace(':', '', $serial);
-
-        return $this->CASerialNumberRepository->exist($serial);
+        return $this->CASerialNumberRepository->exist($certificate->getSerialNumber());
     }
 
-    public function getCertificate(SignatureData $signatureData)
+    public function getCertificate(SignatureData $signatureData): Certificate
     {
         $checker = $this->factory->getChecker($signatureData->getProviderName());
 

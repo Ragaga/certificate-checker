@@ -3,15 +3,26 @@
 namespace Ragaga\CertificateChecker;
 
 use Ragaga\CertificateChecker\Checkers\Checker;
+use Ragaga\CertificateChecker\Checkers\CryptoproChecker;
+use Ragaga\CertificateChecker\Checkers\RutokenChecker;
+use Ragaga\CertificateChecker\Enums\CryptoProvider;
 
 class CheckerFactory
 {
     private $binds    = [];
     private $checkers = [];
 
-    public function bind(string $name, \Closure $closure)
+    public function __construct($binds = [])
     {
-        $this->binds[$name] = $closure;
+        $binds = empty($binds) ? $this->getDefaultBinds() : $binds;
+        foreach ($binds as $name => $checker) {
+            $this->binds[$name] = $checker;
+        }
+    }
+
+    public function bind(string $name, $checker)
+    {
+        $this->binds[$name] = $checker;
     }
 
     public function getChecker(string $name): Checker
@@ -24,6 +35,28 @@ class CheckerFactory
 
         $checker = $this->checkers[$name] ?? null;
 
-        return $checker ?: ($this->binds[$name])();
+        if ($checker) {
+            return $checker;
+        }
+
+        $creator = $this->binds[$name];
+
+        if (is_callable($creator)) {
+            return $creator();
+        }
+
+        if (!class_exists($creator)) {
+            throw new \DomainException('Class does not exists ' . $creator);
+        }
+
+        return new $creator;
+    }
+
+    public function getDefaultBinds()
+    {
+        return [
+            CryptoProvider::CRYPTOPRO => CryptoproChecker::class,
+            CryptoProvider::RUTOKEN   => RutokenChecker::class,
+        ];
     }
 }

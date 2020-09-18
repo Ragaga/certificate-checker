@@ -2,6 +2,8 @@
 
 namespace Ragaga\CertificateChecker\Checkers;
 
+use Ragaga\CertificateChecker\Certificate;
+
 class CryptoproChecker implements Checker
 {
     protected $checks = [];
@@ -60,7 +62,7 @@ class CryptoproChecker implements Checker
 
         $certificate = openssl_x509_parse($certificate);
 
-        return $certificate;
+        return new Certificate($certificate);
     }
 
 }
