@@ -45,7 +45,7 @@ class RutokenChecker implements Checker
         $signature = $beginString . $signature . $endString;
         openssl_pkcs7_read($signature, $certs);
 
-        return new Certificate(openssl_x509_parse($certs[0] ?? []));
+        return $this->createCertificate($certs[0] ?? []);
     }
 
     protected function saveToFile(string $fileName, string $source)
@@ -53,4 +53,8 @@ class RutokenChecker implements Checker
         return file_put_contents($this->savePath . $fileName, base64_decode($source));
     }
 
+    protected function createCertificate($certs): Certificate
+    {
+        return new Certificate(openssl_x509_parse($certs));
+    }
 }

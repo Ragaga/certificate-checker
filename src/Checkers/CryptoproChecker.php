@@ -62,7 +62,12 @@ class CryptoproChecker implements Checker
 
         $certificate = openssl_x509_parse($certificate);
 
-        return new Certificate($certificate);
+        return $this->createCertificate($certificate);
+    }
+
+    protected function createCertificate($certs): Certificate
+    {
+        return new Certificate(openssl_x509_parse($certs));
     }
 
 }

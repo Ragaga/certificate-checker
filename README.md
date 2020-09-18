@@ -9,7 +9,7 @@ or add to composer.json in require
 ```
 
 
-##Usage:
+## Usage:
 
 ```php
 use Ragaga\CertificateChecker\CertificateChecker;

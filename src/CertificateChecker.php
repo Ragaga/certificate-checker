@@ -10,14 +10,14 @@ class CertificateChecker
     /** @var CheckerFactory */
     private $factory;
     /** @var CASerialNumberRepository */
-    private $CASerialNumberRepository;
+    private $serialNumberRepository;
 
     public function __construct(
         CheckerFactory $factory,
-        CASerialNumberRepository $CASerialNumberRepository = null
+        CASerialNumberRepository $serialNumberRepository = null
     ) {
         $this->factory = $factory;
-        $this->CASerialNumberRepository = $CASerialNumberRepository;
+        $this->serialNumberRepository = $serialNumberRepository;
     }
 
     public function isSignatureValid(SignatureData $signatureData): bool
@@ -46,11 +46,11 @@ class CertificateChecker
 
     public function isSerialNumberValid(SignatureData $signatureData): bool
     {
-        if (!$this->CASerialNumberRepository) {
+        if (!$this->serialNumberRepository) {
             throw new \DomainException('Serial Number Repository is not set');
         }
         $certificate = $this->getCertificate($signatureData);
-        return $this->CASerialNumberRepository->exist($certificate->getSerialNumber());
+        return $this->serialNumberRepository->exist($certificate->getSerialNumber());
     }
 
     public function getCertificate(SignatureData $signatureData): Certificate

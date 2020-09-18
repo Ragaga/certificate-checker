@@ -9,9 +9,9 @@ class Certificate
     /** @var array */
     private $certificate;
 
-    public function __construct(array $certificate)
+    public function __construct($certificate)
     {
-        if (empty($certificate)) {
+        if (!is_array($certificate)) {
             throw new \DomainException('Invalid data for certificate');
         }
         $this->certificate = $certificate;
@@ -37,5 +37,10 @@ class Certificate
         $serial = $matches[1] ?? '';
 
         return str_replace(':', '', $serial);
+    }
+
+    public function getSourceCertificate(): array
+    {
+        return $this->certificate;
     }
 }
