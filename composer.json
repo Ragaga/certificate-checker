@@ -1,5 +1,6 @@
 {
   "name": "ragaga/certificate-checker",
+  "license": ["MIT"],
   "description": "Cryptopro, Rutoken Certificate checker library",
   "type": "library",
   "authors": [
