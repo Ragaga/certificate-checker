@@ -30,6 +30,16 @@ class Certificate
         ]);
     }
 
+    public function getSubject(): array
+    {
+        return $this->certificate['subject'] ?? [];
+    }
+
+    public function getCompanyName(): string
+    {
+        return $this->certificate['subject']['O'] ?? '';
+    }
+
     public function getSerialNumber(): string
     {
         $ident = $this->certificate['extensions']['authorityKeyIdentifier'] ?? '';
