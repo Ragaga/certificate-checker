@@ -17,7 +17,7 @@ class CertificateTest extends TestCase
 
         self::assertEquals('222405349970', $certificate->getInn());
         self::assertEquals('Черных Геннадий Сергеевич', $certificate->getHeadName());
-        self::assertEquals('9C76EA41C9A7393687D51EBB836EE26F78318848', $certificate->getSerialNumber());
+        self::assertEquals('9C76EA41C9A7393687D51EBB836EE26F78318848', $certificate->getAuthorityKeyIdentifier());
     }
 
     public function testCreateCertificateFail()

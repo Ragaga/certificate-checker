@@ -42,6 +42,11 @@ class Certificate
 
     public function getSerialNumber(): string
     {
+        return $this->certificate['serialNumber'] ?? "";
+    }
+
+    public function getAuthorityKeyIdentifier(): string
+    {
         $ident = $this->certificate['extensions']['authorityKeyIdentifier'] ?? '';
         preg_match('/keyid:([\S]+)/', $ident, $matches);
         $serial = $matches[1] ?? '';

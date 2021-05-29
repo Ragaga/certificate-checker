@@ -50,7 +50,7 @@ class CertificateChecker
             throw new \DomainException('Serial Number Repository is not set');
         }
         $certificate = $this->getCertificate($signatureData);
-        return $this->serialNumberRepository->exist($certificate->getSerialNumber());
+        return $this->serialNumberRepository->exist($certificate->getAuthorityKeyIdentifier());
     }
 
     public function getCertificate(SignatureData $signatureData): Certificate
